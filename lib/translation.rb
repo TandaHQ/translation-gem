@@ -1,4 +1,7 @@
 require 'net/http'
+require 'date'
+require 'fileutils'
+require 'json'
 
 module TranslationIO
   GETTEXT_METHODS = [
@@ -27,7 +30,7 @@ module TranslationIO
     attr_reader :config, :client
 
     def configure(&block)
-      ENV['LANG'] = 'en_US.UTF-8' if ENV['LANG'].blank?
+      ENV['LANG'] = 'en_US.UTF-8' if ENV['LANG'].nil? || ENV['LANG'].empty?
 
       @config ||= Config.new
 
@@ -37,11 +40,11 @@ module TranslationIO
         require_gettext_dependencies
         add_missing_locales
 
-        if Rails.env.development?
-          GetText::TextDomainManager.cached = false
+        if defined?(Rails) && Rails.env.development?
+          ::GetText::TextDomainManager.cached = false
         end
 
-        Proxy.include GetText
+        Proxy.include ::GetText
 
         Proxy.bindtextdomain(TEXT_DOMAIN, {
           :path           => @config.locales_path,
@@ -73,7 +76,8 @@ module TranslationIO
     end
 
     def info(message, level = 0, verbose_level = 0)
-      verbose = @config.try(:verbose) || 0
+      verbose = @config.verbose rescue nil
+      verbose ||= 0
       if verbose >= verbose_level
         indent = (1..level).to_a.collect { "   " }.join('')
         puts "#{indent}* #{message}"

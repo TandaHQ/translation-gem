@@ -20,8 +20,8 @@ module TranslationIO
             TranslationIO.info file_path, 2, 2
             file_translations = YAML::load(File.read(file_path))
 
-            unless file_translations.blank?
-              all_translations = all_translations.deep_merge(file_translations)
+            unless file_translations.nil? || file_translations.empty?
+              all_translations = all_translations.deep_merge!(file_translations)
             end
           end
 

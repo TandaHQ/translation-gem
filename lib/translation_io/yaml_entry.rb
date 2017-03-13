@@ -23,19 +23,19 @@ module TranslationIO
 
     class << self
       def string?(key, value)
-        key.present? && value.is_a?(String)
+        !key.nil? && !key.empty? && value.is_a?(String)
       end
 
       def from_locale?(key, locale)
-        key.present? && key.start_with?("#{locale}.")
+        !key.nil? && !key.empty? && key.start_with?("#{locale}.")
       end
 
       def ignored?(key)
-        key.present? && ignored_key_prefixes.any? { |p| key_without_locale(key).start_with?(p) }
+        !key.nil? && !key.empty? && ignored_key_prefixes.any? { |p| key_without_locale(key).start_with?(p) }
       end
 
       def localization?(key, value)
-        key.present? && (localization_prefix?(key) || (!string?(key, value) && !value.nil?))
+        !key.nil? && !key.empty? && (localization_prefix?(key) || (!string?(key, value) && !value.nil?))
       end
 
       def localization_prefix?(key)

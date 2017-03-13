@@ -14,10 +14,10 @@ Gem::Specification.new do |s|
   s.license          = "MIT"
 
   s.add_dependency('gettext', '>= 3.2.2')
+  s.add_dependency('i18n',    '>= 0.7.0')
 
   s.add_development_dependency('rake',                      '~> 10.3'  )
   s.add_development_dependency('rspec',                     '>= 2.14.1')
-  s.add_development_dependency('rails',                     '~> 4.1'   )
   s.add_development_dependency('simplecov'                             )
   s.add_development_dependency('codeclimate-test-reporter', '~> 1.0.0' )
 end

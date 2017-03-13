@@ -3,8 +3,8 @@ module TranslationIO
     class << self
 
       def get_yaml_data_from_po_data(po_data, target_locale)
-        parser            = GetText::POParser.new
-        po_representation = GetText::PO.new
+        parser            = ::GetText::POParser.new
+        po_representation = ::GetText::PO.new
         flat_translations = {}
 
         parser.parse(po_data, po_representation)

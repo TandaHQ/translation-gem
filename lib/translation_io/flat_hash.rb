@@ -25,7 +25,7 @@ module TranslationIO
         current_key    = splitted[0] # first is always a hash
         key_string     = splitted[1]
 
-        if key_string.blank? # if only one key like { 'en' => 'salut' }
+        if key_string.nil? || key_string.empty? # if only one key like { 'en' => 'salut' }
           current_object[current_key] = value
         else
           # Put back '[' if needed
@@ -94,7 +94,7 @@ module TranslationIO
 
         if value.is_a? Hash
           value.each_pair do |key, value|
-            current_level_key = [ parent_key, key ].reject(&:blank?).join('.')
+            current_level_key = [ parent_key, key ].reject(&:nil?).reject(&:empty?).join('.')
             flat_hash.merge!(get_flat_hash_for_level(value, current_level_key))
           end
         elsif value.is_a? Array

@@ -16,8 +16,8 @@ module TranslationIO
             TranslationIO.info file_path, 2, 2
             file_translations = YAML::load(File.read(file_path))
 
-            unless file_translations.blank?
-              all_translations = all_translations.deep_merge(file_translations)
+            unless file_translations.nil? || file_translations.empty?
+              all_translations = all_translations.deep_merge!(file_translations)
             end
           end
 
@@ -27,13 +27,13 @@ module TranslationIO
             YamlEntry.string?(key, value) && YamlEntry.from_locale?(key, @source_locale) && !YamlEntry.ignored?(key) && !YamlEntry.localization?(key, value)
           end
 
-          pot_representation = GetText::PO.new
+          pot_representation = ::GetText::PO.new
 
           source_flat_string_translations.each_pair do |key, value|
             msgid = value
 
             unless msgid.to_s.empty?
-              pot_entry            = GetText::POEntry.new(:msgctxt)
+              pot_entry            = ::GetText::POEntry.new(:msgctxt)
               pot_entry.msgid      = msgid
               pot_entry.msgstr     = ''
               pot_entry.msgctxt    = key.split('.', 2).last

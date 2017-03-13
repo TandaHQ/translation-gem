@@ -1,21 +1,28 @@
 require 'i18n'
 require 'i18n/config'
+require 'gettext'
+require 'gettext/tools'
+require 'racc/parser'
 
-module TranslationIO
-  class Railtie < Rails::Railtie
-    rake_tasks do
-      require 'translation_io/tasks'
-    end
+if defined?(Rails)
+  module TranslationIO
+    class Railtie < Rails::Railtie
+      rake_tasks do
+        require 'translation_io/tasks'
+      end
 
-    initializer 'translation.rails_extensions' do
-      ActionController::Base.send(:include, TranslationIO::Controller)
-    end
+      initializer 'translation.rails_extensions' do
+        ActionController::Base.send(:include, TranslationIO::Controller)
+      end
 
-    config.after_initialize do
-      # Ensure GetText.locale is in sync with I18n's default locale at boot
-      I18n.locale = I18n.default_locale
+      config.after_initialize do
+        # Ensure GetText.locale is in sync with I18n's default locale at boot
+        I18n.locale = I18n.default_locale
+      end
     end
   end
+else
+  I18n.load_path += Dir[File.join('config', 'locales', '*.{rb,yml}').to_s]
 end
 
 module I18n
